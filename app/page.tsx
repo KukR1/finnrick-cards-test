@@ -28,7 +28,7 @@ export default function Home() {
           </div>
         </div>
         <div className="bg-[#0E8A4A] rounded-b-xl h-full flex items-center justify-between px-2.5">
-          <GradeA size={12} />
+          <GradeA />
           <p className="widget-label-grade-text font-semibold">GREAT</p>
         </div>
       </div>
