@@ -8,13 +8,11 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #000000;
     --foreground: #ededed;
   }
 }
@@ -22,5 +20,26 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+.widget-text-content {
+  line-height: 0.9rem;
+  font-weight: 600;
+  font-size: 0.75rem;
+  color: var(--background);
+}
+
+.widget-text-xs-content {
+  font-size: 0.625rem;
+  color: var(--background);
+}
+
+.widget-text-gray-xs {
+  font-size: 0.625rem;
+  color: #666666;
+}
+
+.widget-label-grade-text {
+  font-size: 0.75rem;
+  color: var(--foreground);
 }

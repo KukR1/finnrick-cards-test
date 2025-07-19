@@ -1,0 +1,207 @@
+class FinnrickRatingWidget extends HTMLElement {
+  constructor() {
+    super()
+    this.attachShadow({ mode: "open" })
+  }
+
+  static get observedAttributes() {
+    return ["company-name", "products", "tested-samples", "last-test-date", "grade", "grade-text", "grade-color"]
+  }
+
+  connectedCallback() {
+    this.render()
+  }
+
+  attributeChangedCallback() {
+    this.render()
+  }
+
+  getGradeIcon() {
+    return `
+      <svg width="12" height="22" viewBox="0 0 12 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M0.3125 17L4.32031 5.35938H7.42969L11.5156 17H8.85938L7 11.375C6.77604 10.6458 6.54688 9.85938 6.3125 9.01562C6.08333 8.16667 5.83854 7.23438 5.57812 6.21875H6.125C5.86979 7.23438 5.63281 8.16927 5.41406 9.02344C5.19531 9.8724 4.97656 10.6562 4.75781 11.375L2.9375 17H0.3125ZM2.82031 14.3359V12.4531H9.00781V14.3359H2.82031Z"
+          fill="#EFEFEF"
+        />
+      </svg>
+    `
+  }
+
+  getQuestionMarkIcon() {
+    return `
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M9.73438 19.4707C8.67708 19.4707 7.66992 19.3089 6.71289 18.9854C5.75586 18.6663 4.87858 18.2129 4.08105 17.625C3.28353 17.0417 2.59082 16.3512 2.00293 15.5537C1.4196 14.7607 0.966146 13.888 0.642578 12.9355C0.323568 11.9785 0.164062 10.9714 0.164062 9.91406C0.164062 8.85677 0.323568 7.84961 0.642578 6.89258C0.966146 5.93555 1.4196 5.05827 2.00293 4.26074C2.59082 3.46322 3.28353 2.77279 4.08105 2.18945C4.87858 1.60156 5.75586 1.14811 6.71289 0.829102C7.66992 0.505534 8.67708 0.34375 9.73438 0.34375C10.7917 0.34375 11.7965 0.505534 12.749 0.829102C13.7061 1.14811 14.5811 1.60156 15.374 2.18945C16.1715 2.77279 16.862 3.46322 17.4453 4.26074C18.0332 5.05827 18.4867 5.93555 18.8057 6.89258C19.1292 7.84961 19.291 8.85677 19.291 9.91406C19.291 10.9714 19.1292 11.9785 18.8057 12.9355C18.4867 13.888 18.0332 14.7607 17.4453 15.5537C16.862 16.3512 16.1715 17.0417 15.374 17.625C14.5811 18.2129 13.7061 18.6663 12.749 18.9854C11.7965 19.3089 10.7917 19.4707 9.73438 19.4707ZM9.73438 18.1514C10.6413 18.1514 11.5072 18.0124 12.332 17.7344C13.1569 17.4564 13.9111 17.0645 14.5947 16.5586C15.2829 16.0573 15.8776 15.4648 16.3789 14.7812C16.8848 14.0931 17.2767 13.3366 17.5547 12.5117C17.8327 11.6868 17.9717 10.821 17.9717 9.91406C17.9717 9.0026 17.8327 8.13444 17.5547 7.30957C17.2767 6.4847 16.8848 5.73047 16.3789 5.04688C15.8776 4.35872 15.2829 3.76172 14.5947 3.25586C13.9111 2.75 13.1569 2.35807 12.332 2.08008C11.5072 1.80208 10.6413 1.66309 9.73438 1.66309C8.82292 1.66309 7.95475 1.80208 7.12988 2.08008C6.30501 2.35807 5.5485 2.75 4.86035 3.25586C4.17676 3.75716 3.58203 4.35189 3.07617 5.04004C2.57031 5.72819 2.17839 6.4847 1.90039 7.30957C1.62695 8.13444 1.49023 9.0026 1.49023 9.91406C1.49023 10.821 1.62695 11.6868 1.90039 12.5117C2.17839 13.3366 2.57031 14.0931 3.07617 14.7812C3.58203 15.4648 4.17676 16.0573 4.86035 16.5586C5.5485 17.0645 6.30501 17.4564 7.12988 17.7344C7.95475 18.0124 8.82292 18.1514 9.73438 18.1514ZM8.64062 11.8896V11.7598C8.64062 11.1628 8.69303 10.6979 8.79785 10.3652C8.90723 10.028 9.06445 9.76139 9.26953 9.56543C9.47917 9.36491 9.72982 9.17578 10.0215 8.99805C10.3268 8.80664 10.582 8.58789 10.7871 8.3418C10.9967 8.09115 11.1016 7.78809 11.1016 7.43262C11.1016 7.16829 11.0378 6.94043 10.9102 6.74902C10.7871 6.55762 10.6208 6.40951 10.4111 6.30469C10.2061 6.19531 9.97363 6.14062 9.71387 6.14062C9.48145 6.14062 9.25814 6.19076 9.04395 6.29102C8.82975 6.39128 8.65202 6.54395 8.51074 6.74902C8.37402 6.9541 8.29655 7.21159 8.27832 7.52148H6.53516C6.54883 6.89258 6.69922 6.36849 6.98633 5.94922C7.27799 5.52539 7.66309 5.20866 8.1416 4.99902C8.62012 4.78483 9.14648 4.67773 9.7207 4.67773C10.3542 4.67773 10.9102 4.78939 11.3887 5.0127C11.8717 5.23145 12.2477 5.5459 12.5166 5.95605C12.7855 6.36621 12.9199 6.84928 12.9199 7.40527C12.9199 7.97493 12.7878 8.45573 12.5234 8.84766C12.2637 9.23503 11.9036 9.56543 11.4434 9.83887C11.1699 10.0075 10.9466 10.1715 10.7734 10.3311C10.6003 10.4906 10.4727 10.6797 10.3906 10.8984C10.3132 11.1172 10.2744 11.4043 10.2744 11.7598V11.8896H8.64062ZM9.46777 15.1162C9.14421 15.1162 8.87533 15.016 8.66113 14.8154C8.4515 14.6104 8.34668 14.3529 8.34668 14.043C8.34668 13.7285 8.4515 13.471 8.66113 13.2705C8.87533 13.0654 9.14421 12.9629 9.46777 12.9629C9.79134 12.9629 10.0579 13.0654 10.2676 13.2705C10.4772 13.471 10.582 13.7285 10.582 14.043C10.582 14.3529 10.4772 14.6104 10.2676 14.8154C10.0579 15.016 9.79134 15.1162 9.46777 15.1162Z"
+          fill="#999999"
+        />
+      </svg>
+    `
+  }
+
+  render() {
+    const companyName = this.getAttribute("company-name") || "Company Name"
+    const products = this.getAttribute("products") || "Product Information"
+    const testedSamples = this.getAttribute("tested-samples") || "0"
+    const lastTestDate = this.getAttribute("last-test-date") || "No test date"
+    const gradeText = this.getAttribute("grade-text") || "GREAT"
+    const gradeColor = this.getAttribute("grade-color") || "#0E8A4A"
+
+    this.shadowRoot.innerHTML = `
+      <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        
+        :host {
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+          display: inline-block;
+        }
+        
+        .widget-container {
+          background-color: #EFEFEF;
+          width: 300px;
+          height: 150px;
+          border-radius: 12px;
+          display: flex;
+          flex-direction: column;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .widget-header {
+          display: flex;
+          flex-direction: column;
+          margin: 0 10px;
+          margin-top: 12px;
+        }
+        
+        .widget-title {
+          color: #000;
+          font-size: 18px;
+          font-weight: 700;
+          margin: 0;
+          line-height: 1.2;
+        }
+        
+        .widget-divider {
+          height: 1px;
+          background-color: #000;
+          margin-top: 2px;
+        }
+        
+        .widget-content {
+          display: flex;
+          margin: 0 10px;
+          margin-top: 8px;
+          margin-bottom: 8px;
+          flex: 1;
+        }
+        
+        .widget-left {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+        }
+        
+        .widget-right {
+          display: flex;
+          flex-direction: column;
+          width: 45%;
+          align-items: flex-end;
+          justify-content: space-between;
+        }
+        
+        .widget-company {
+          color: #000;
+          font-size: 12px;
+          font-weight: 600;
+          margin: 0;
+          line-height: 1.2;
+          margin-bottom: 2px;
+        }
+        
+        .widget-products {
+          color: #000;
+          font-size: 12px;
+          font-weight: 600;
+          margin: 0;
+          line-height: 1.2;
+        }
+        
+        .widget-test-info {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+        }
+        
+        .widget-samples {
+          color: #000;
+          font-size: 9px;
+          font-weight: 400;
+          margin: 0;
+          line-height: 1.2;
+        }
+        
+        .widget-date {
+          color: #666;
+          font-size: 9px;
+          font-weight: 400;
+          margin: 0;
+          line-height: 1.2;
+        }
+        
+        .widget-grade-section {
+          background-color: var(--grade-color, #0E8A4A);
+          border-radius: 0 0 12px 12px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 10px;
+        }
+        
+        .widget-grade-text {
+          color: #EFEFEF;
+          font-size: 14px;
+          font-weight: 600;
+          margin: 0;
+        }
+        
+        .question-icon {
+          width: 20px;
+          height: 20px;
+          cursor: pointer;
+        }
+      </style>
+      
+      <div class="widget-container">
+        <div class="widget-header">
+          <h1 class="widget-title">FINNRICK RATING™</h1>
+          <div class="widget-divider"></div>
+        </div>
+        
+        <div class="widget-content">
+          <div class="widget-left">
+            <div>
+              <p class="widget-company">${companyName}</p>
+              <p class="widget-products">${products}</p>
+            </div>
+          </div>
+          
+          <div class="widget-right">
+            <div class="widget-test-info">
+              <p class="widget-samples">Tested ${testedSamples} Samples</p>
+              <p class="widget-date">Last test ${lastTestDate}</p>
+            </div>
+            <div class="question-icon">${this.getQuestionMarkIcon()}</div>
+          </div>
+        </div>
+        
+        <div class="widget-grade-section" style="background-color: ${gradeColor}">
+          <div style="width: 12px; height: 22px;">${this.getGradeIcon()}</div>
+          <p class="widget-grade-text">${gradeText}</p>
+        </div>
+      </div>
+    `
+  }
+}
+
+customElements.define("finnrick-rating-widget", FinnrickRatingWidget)
