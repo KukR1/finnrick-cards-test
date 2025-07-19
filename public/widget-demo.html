@@ -145,14 +145,41 @@
           <li><strong>grade-color</strong>: Background color for the grade section (hex color)</li>
         </ul>
 
-        <h3>4. Dynamic Updates with JavaScript</h3>
-        <pre><code>// Get the widget element
-const widget = document.querySelector('finnrick-rating-widget');
+        <h3>4. Test Widget on Any Website (Browser Console)</h3>
+        <p>Want to test the widget on any website instantly? Follow these steps:</p>
+        <ol>
+          <li>Open any website in your browser</li>
+          <li>Press <code>F12</code> or right-click and select "Inspect"</li>
+          <li>Go to the <strong>Console</strong> tab</li>
+          <li>Copy and paste this code, then press Enter:</li>
+        </ol>
 
-// Update attributes dynamically
-widget.setAttribute('company-name', 'New Company Name');
-widget.setAttribute('grade-text', 'EXCELLENT');
-widget.setAttribute('grade-color', '#00AA00');</code></pre>
+        <pre><code>// Load the Finnrick Rating Widget
+const script = document.createElement('script');
+script.src = 'https://finnrick-cards-test.vercel.app/finnrick-rating-widget.js';
+document.head.appendChild(script);
+
+// Wait for script to load, then add the widget
+script.onload = () => {
+  const widget = document.createElement('finnrick-rating-widget');
+  widget.setAttribute('company-name', 'Test Company');
+  widget.setAttribute('products', 'Premium Research Compounds');
+  widget.setAttribute('tested-samples', '5');
+  widget.setAttribute('last-test-date', '19 Jul 2025');
+  widget.setAttribute('grade-text', 'EXCELLENT');
+  widget.setAttribute('grade-color', '#0E8A4A');
+  
+  // Add the widget to the top of the page
+  document.body.insertBefore(widget, document.body.firstChild);
+  
+  widget.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  `;
+};</code></pre>
       </div>
     </div>
 
