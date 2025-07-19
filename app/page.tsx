@@ -37,7 +37,6 @@ export default function Home() {
         <div className="flex gap-4">
           <a
             href={isClient ? `${domain}/widget-demo.html` : "#"}
-            target="_blank"
             rel="noopener noreferrer"
             className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50"
           >
